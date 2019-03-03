@@ -1,4 +1,4 @@
-import file
+import csv
 
 
 # Methods
@@ -24,7 +24,10 @@ def iv_quaternion_product(a, b):
 
 
 # Read and import the provided (.csv) dataset (5 marks)
-
+with open('imu-data.csv') as csvfile:
+    csvcontents = csv.DictReader(csvfile)
+    for line in csvcontents:
+        print(line)
 
 # Convert rotational rate to radians/sec and normalize the magnitude
 # of both the accelerometer and magnetometer values
