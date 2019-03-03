@@ -1,4 +1,5 @@
 import csv
+import math
 
 
 # Methods
@@ -30,9 +31,16 @@ with open('imu-data.csv') as csvfile:
     csv_reader = csv.DictReader(csvfile)
     csv_reader.fieldnames = [field.strip() for field in csv_reader.fieldnames]
 
-    # Convert rotational rate to radians/sec and normalize the magnitude
-    # of both the accelerometer and magnetometer values
-    # taking special care of NaN divisions (5 marks)
     for line in csv_reader:
         newDict = dict(line)
+
+        # Convert rotational rate to radians/sec
+        newDict['gyroscope.X'] = math.radians(float(newDict['gyroscope.X']))
+        newDict['gyroscope.Y'] = math.radians(float(newDict['gyroscope.Y']))
+        newDict['gyroscope.Z'] = math.radians(float(newDict['gyroscope.Z']))
+
+        # Normalize magnitude of both the accelerometer and magnetometer values
+        # taking special care of NaN divisions (5 marks)
+
+
         print(newDict)
