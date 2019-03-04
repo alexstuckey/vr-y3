@@ -15,8 +15,13 @@ def ii_quaternion_to_radians():
 
 
 # (iii) convert a quaternion to its conjugate (inverse rotation) (2 marks)
-def iii_quaternion_inverse_rotation():
-    return
+def iii_quaternion_inverse_rotation(a):
+    q = (a[0],
+         - a[1],
+         - a[2],
+         - a[3])
+
+    return q
 
 
 # (iv) calculate the quaternion product of quaternion a and b (2 marks)
