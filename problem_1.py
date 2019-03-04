@@ -21,7 +21,12 @@ def iii_quaternion_inverse_rotation():
 
 # (iv) calculate the quaternion product of quaternion a and b (2 marks)
 def iv_quaternion_product(a, b):
-    return
+    q = (a[0] * b[0] - a[1] * b[1] - a[2] * b[2] - a[3] * b[3],
+         a[0] * b[1] + b[0] * a[1] + a[2] * b[3] - b[2] * a[3],
+         a[0] * b[2] + b[0] * a[2] + b[1] * a[3] - a[1] * b[3],
+         a[0] * b[3] + b[0] * a[3] + a[1] * b[2] - b[1] * a[2])
+
+    return q
 
 
 # Read and import the provided (.csv) dataset (5 marks)
