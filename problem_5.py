@@ -1,0 +1,76 @@
+import problem_1
+import problem_2
+import matplotlib.pyplot as plt
+
+# Import data
+dataset = problem_1.load_dataset()
+filter_gyroscope = problem_2.dead_reckoning_gyroscope()
+
+
+my_dpi = 100
+fig, ax = plt.subplots(figsize=(1280 / my_dpi, 720 / my_dpi),
+                       dpi=my_dpi,
+                       nrows=3, ncols=3)
+
+# Render lines
+ax[0][0].set_xlabel('Time')
+ax[0][0].set_ylabel(r'Rotational Rate (°$\,s^{-1}$)')
+ax[0][0].set_title('Tri-Axial Angular Rate')
+ax[0][0].plot([row['time'] for row in dataset],
+              [row['gyroscope.X-deg'] for row in dataset],
+              label='X')
+ax[0][0].plot([row['time'] for row in dataset],
+              [row['gyroscope.Y-deg'] for row in dataset],
+              label='Y')
+ax[0][0].plot([row['time'] for row in dataset],
+              [row['gyroscope.Z-deg'] for row in dataset],
+              label='Z')
+
+
+ax[0][1].set_xlabel('Time')
+ax[0][1].set_ylabel(r'Acceleration (ms$^{-2}$)')
+ax[0][1].set_title('Tri-Axial Acceleration in g')
+ax[0][1].plot([row['time'] for row in dataset],
+              [row['accelerometer.X'] for row in dataset],
+              label='X')
+ax[0][1].plot([row['time'] for row in dataset],
+              [row['accelerometer.Y'] for row in dataset],
+              label='Y')
+ax[0][1].plot([row['time'] for row in dataset],
+              [row['accelerometer.Z'] for row in dataset],
+              label='Z')
+
+
+ax[0][2].set_xlabel('Time')
+ax[0][2].set_ylabel(r'Flux (Gauss, $G$)')
+ax[0][2].set_title('Tri-Axial Magnetic Flux')
+ax[0][2].plot([row['time'] for row in dataset],
+              [row['magnetometer.X'] for row in dataset],
+              label='X')
+ax[0][2].plot([row['time'] for row in dataset],
+              [row['magnetometer.Y'] for row in dataset],
+              label='Y')
+ax[0][2].plot([row['time'] for row in dataset],
+              [row['magnetometer.Z'] for row in dataset],
+              label='Z')
+
+
+ax[1][0].set_xlabel('Time')
+ax[1][0].set_ylabel(r'Orientation (°$\,s^{-1}$)')
+ax[1][0].set_title('Gyroscope')
+ax[1][0].plot([row['time'] for row in filter_gyroscope],
+              [row['est_gyro_deg'] for row in filter_gyroscope])
+
+
+ax[1][1].set_xlabel('Time')
+ax[1][1].set_ylabel(r'Orientation (°$\,s^{-1}$)')
+ax[1][1].set_title('Gyroscope + Accelerometer')
+
+
+ax[1][2].set_xlabel('Time')
+ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
+ax[1][2].set_title('Gyroscope + Accelerometer + Magnetometer')
+
+
+plt.tight_layout()
+plt.savefig('testplot.png')
