@@ -54,6 +54,9 @@ def dead_reckoning_gyroscope():
         qs.append(qs_k)
 
     for k in range(len(dataset)):
-        dataset[k]['est_gyro'] = qs[k]
+        dataset[k]['est_gyro_q'] = qs[k]
+        dataset[k]['est_gyro_rad'] = problem_1.ii_quaternion_to_radians(qs[k])
+        dataset[k]['est_gyro_deg'] = tuple(
+            np.rad2deg(dataset[k]['est_gyro_rad']))
 
     return dataset
