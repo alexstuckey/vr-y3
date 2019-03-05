@@ -88,6 +88,11 @@ def each_row(row):
     newDict['gyroscope.Y'] = math.radians(float(row['gyroscope.Y']))
     newDict['gyroscope.Z'] = math.radians(float(row['gyroscope.Z']))
 
+    # Store original rotational rate in deg/sex
+    newDict['gyroscope.X-deg'] = float(row['gyroscope.X'])
+    newDict['gyroscope.Y-deg'] = float(row['gyroscope.Y'])
+    newDict['gyroscope.Z-deg'] = float(row['gyroscope.Z'])
+
     # Normalize magnitude of both the accelerometer and magnetometer values
     # taking special care of NaN divisions (5 marks)
     acc_sum = \
