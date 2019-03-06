@@ -3,18 +3,6 @@ import numpy as np
 import problem_1
 
 
-def norm_3(q):
-    return math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2])
-
-
-def norm(v):
-    if len(v) > 0:
-        normalised_v = v / np.sqrt(np.sum(v**2))
-        return normalised_v
-    else:
-        return []
-
-
 def make_q(v, theta):
     q = (math.cos(theta / 2),
          v[0] * math.sin(theta / 2),
@@ -48,8 +36,8 @@ def dead_reckoning_gyroscope():
 
         qs_k = problem_1.iv_quaternion_product(
             qs[k - 1],
-            make_q(dataset[k]['omega'] / norm_3(dataset[k]['omega']),
-                   norm_3(dataset[k]['omega']) * delta_t)
+            make_q(dataset[k]['omega'] / np.linalg.norm(dataset[k]['omega']),
+                   np.linalg.norm(dataset[k]['omega']) * delta_t)
         )
         qs.append(qs_k)
 
