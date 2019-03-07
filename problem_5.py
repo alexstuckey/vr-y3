@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # Import data
 dataset = problem_1.load_dataset()
-filter_gyroscope = problem_2.dead_reckoning_gyroscope()
+filter_gyro = problem_2.dead_reckoning_gyroscope()
 
 
 my_dpi = 100
@@ -58,8 +58,8 @@ ax[0][2].plot([row['time'] for row in dataset],
 ax[1][0].set_xlabel('Time')
 ax[1][0].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][0].set_title('Gyroscope')
-ax[1][0].plot([row['time'] for row in filter_gyroscope],
-              [row['est_gyro_deg'] for row in filter_gyroscope])
+ax[1][0].plot([row['time'] for row in filter_gyro],
+              [row['est_gyro_deg'] for row in filter_gyro])
 
 
 ax[1][1].set_xlabel('Time')
@@ -71,6 +71,11 @@ ax[1][2].set_xlabel('Time')
 ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][2].set_title('Gyroscope + Accelerometer + Magnetometer')
 
+# for frame in range(0, len(filter_gyro)):
+#     print(filter_gyro[frame]['time'],
+#           filter_gyro[frame]['est_gyro'])
+#     plt.plot(filter_gyro[frame]['time'],
+#              filter_gyro[frame]['est_gyro'])
 
 plt.tight_layout()
 plt.savefig('testplot.png')
