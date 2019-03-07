@@ -1,10 +1,12 @@
 import problem_1
 import problem_2
+import problem_3
 import matplotlib.pyplot as plt
 
 # Import data
 dataset = problem_1.load_dataset()
 filter_gyro = problem_2.dead_reckoning_gyroscope()
+filter_gyro_acc = problem_3.dead_reckoning_gyroscope_accelerometer(alpha=0.01)
 
 
 my_dpi = 100
@@ -65,7 +67,8 @@ ax[1][0].plot([row['time'] for row in filter_gyro],
 ax[1][1].set_xlabel('Time')
 ax[1][1].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][1].set_title('Gyroscope + Accelerometer')
-
+ax[1][1].plot([row['time'] for row in filter_gyro_acc],
+              [row['est_g_a_deg'] for row in filter_gyro_acc])
 
 ax[1][2].set_xlabel('Time')
 ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
