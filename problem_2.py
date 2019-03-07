@@ -36,8 +36,10 @@ def dead_reckoning_gyroscope():
 
         qs_k = problem_1.iv_quaternion_product(
             qs[k - 1],
-            make_q(dataset[k]['omega'] / np.linalg.norm(dataset[k]['omega']),
-                   np.linalg.norm(dataset[k]['omega']) * delta_t)
+            make_q(
+                dataset[k]['omega'] / np.linalg.norm(dataset[k]['omega']),
+                np.linalg.norm(dataset[k]['omega']) * delta_t
+            )
         )
         qs.append(qs_k)
 
