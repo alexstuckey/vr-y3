@@ -2,6 +2,7 @@ import problem_1
 import problem_2
 import problem_3
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 # Import data
 dataset = problem_1.load_dataset()
@@ -74,6 +75,8 @@ ax[1][2].set_xlabel('Time')
 ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][2].set_title('Gyroscope + Accelerometer + Magnetometer')
 
+plt.delaxes(ax[2][0])
+ax[2][0] = fig.add_subplot(3, 3, 7, projection='3d')
 # for frame in range(0, len(filter_gyro)):
 #     print(filter_gyro[frame]['time'],
 #           filter_gyro[frame]['est_gyro'])
