@@ -43,7 +43,7 @@ def dead_reckoning_gyroscope_accelerometer(alpha=0.001):
         )
 
         # Calculate the tilt axis (2 marks)
-        t = (a[3], 0, a[1])
+        t = (a_radians[2], 0, -a_radians[0])
 
         # Find the angle φ between the up vector and the vector obtained from
         #   the accelerometer (2 marks)
