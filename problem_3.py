@@ -14,7 +14,7 @@ def q_to_v_theta(q):
 
 
 # Estimate orientation from the gyroscope (rotational rate) and accelerometer.
-def dead_reckoning_tilt(alpha=0.001):
+def dead_reckoning_tilt(alpha_tilt=0.001):
     # Initial orientation
     qs = [(1.0, 0.0, 0.0, 0.0)]
 

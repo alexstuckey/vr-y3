@@ -6,11 +6,11 @@ import problem_3
 
 
 # Estimate orientation from the gyroscope (rotational rate) and accelerometer.
-def dead_reckoning_yaw(alpha=0.001):
+def dead_reckoning_yaw(alpha_yaw=0.001, alpha_tilt=0.001):
     # Initial orientation
     qs = [(1.0, 0.0, 0.0, 0.0)]
 
-    dataset = problem_3.dead_reckoning_tilt(alpha=alpha)
+    dataset = problem_3.dead_reckoning_tilt(alpha_tilt=alpha_tilt)
 
     for k in range(1, len(dataset)):
         delta_t = dataset[k]['time'] - dataset[k - 1]['time']

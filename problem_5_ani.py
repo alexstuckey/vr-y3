@@ -9,8 +9,8 @@ import matplotlib.animation as animation
 
 # Import data
 dataset = problem_1.load_dataset()
-filter_gyro = problem_2.dead_reckoning_gyroscope()
-filter_gyro_acc = problem_3.dead_reckoning_gyroscope_accelerometer(alpha=0.01)
+filter_tilt = problem_2.dead_reckoning_gyroscope()
+filter_yaw = problem_4.dead_reckoning_yaw(alpha_tilt=0.05, alpha_yaw=0.05)
 
 
 my_dpi = 100

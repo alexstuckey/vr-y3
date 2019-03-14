@@ -9,7 +9,7 @@ from mpl_toolkits import mplot3d
 # dataset is added to through each problem 1, 2, 3, 4
 # problem_1.load_dataset(), problem_2.dead_reckoning_gyroscope(),
 #    problem_3.dead_reckoning_tilt(alpha=0.001)
-dataset = problem_4.dead_reckoning_yaw(alpha=0.001)[1:]
+dataset = problem_4.dead_reckoning_yaw(alpha_tilt=0.005, alpha_yaw=0.005)[1:]
 
 my_dpi = 100
 fig, ax = plt.subplots(figsize=(1280 / my_dpi, 720 / my_dpi),
