@@ -12,7 +12,7 @@ def dead_reckoning_yaw(alpha_yaw=0.001, alpha_tilt=0.001):
 
     dataset = problem_3.dead_reckoning_tilt(alpha_tilt=alpha_tilt)
 
-    # Reference from first magnetometer sample
+    # Take reference reading from first magnetometer sample
     m_ref = (0.0, *dataset[1]['m'])
     q_ref = (1.0, 0.0, 0.0, 0.0)
 
@@ -21,7 +21,10 @@ def dead_reckoning_yaw(alpha_yaw=0.001, alpha_tilt=0.001):
 
         qs_k = dataset[k]['est_tilt_q']
 
+        # Take reading of magnetometer at each frame
         m_prime = (0.0, *dataset[k]['m'])
+
+        # Start applying complementary filter from section VI
         m_prime = problem_1.iv_quaternion_product(
             problem_1.iii_quaternion_inverse_rotation(qs_k),
             problem_1.iv_quaternion_product(
