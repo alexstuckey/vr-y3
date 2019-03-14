@@ -1,6 +1,7 @@
 import problem_1
 import problem_2
 import problem_3
+import problem_4
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import numpy as np
@@ -8,9 +9,7 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.animation as animation
 
 # Import data
-dataset = problem_1.load_dataset()
-filter_tilt = problem_2.dead_reckoning_gyroscope()
-filter_yaw = problem_4.dead_reckoning_yaw(alpha_tilt=0.05, alpha_yaw=0.05)
+dataset = problem_4.dead_reckoning_yaw(alpha_tilt=0.05, alpha_yaw=0.05)
 
 
 my_dpi = 100
@@ -32,153 +31,139 @@ def frame_ani(frame):
 
     ax[0].set_xlabel('X Axis')
     ax[0].set_ylabel('Y Axis')
-    ax[0].set_title('Gyroscope')
+    ax[0].set_title('Gyroscope Filter')
     ax[1].set_xlabel('X Axis')
     ax[1].set_ylabel('Y Axis')
-    ax[1].set_title('Accelerometer')
+    ax[1].set_title('Gyro + Acc Drift Filter')
     ax[2].set_xlabel('X Axis')
     ax[2].set_ylabel('Y Axis')
-    ax[2].set_title('Magnetometer')
+    ax[2].set_title('Gyro + Acc + Mag Yaw Filter')
 
-    ax[0].set_xlim3d(0, 1)
-    ax[0].set_ylim3d(0, 1)
-    ax[0].set_zlim3d(0, 1)
-    ax[1].set_xlim3d(0, 1)
-    ax[1].set_ylim3d(0, 1)
-    ax[1].set_zlim3d(0, 1)
-    ax[2].set_xlim3d(0, 1)
-    ax[2].set_ylim3d(0, 1)
-    ax[2].set_zlim3d(0, 1)
+    ax[0].set_xlim3d(-0.6, 0.6)
+    ax[0].set_ylim3d(-0.6, 0.6)
+    ax[0].set_zlim3d(-0.6, 0.6)
+    ax[1].set_xlim3d(-0.6, 0.6)
+    ax[1].set_ylim3d(-0.6, 0.6)
+    ax[1].set_zlim3d(-0.6, 0.6)
+    ax[2].set_xlim3d(-0.6, 0.6)
+    ax[2].set_ylim3d(-0.6, 0.6)
+    ax[2].set_zlim3d(-0.6, 0.6)
 
     frameTick = dataset[frame]
+    gyro = frameTick['est_gyro_q']
+    gyro_tilt = frameTick['est_tilt_q']
+    gyro_yaw = frameTick['est_yaw_q']
 
-    # Extract data from frame
-    gyro = np.array([0,
-                     frameTick['gyroscope.X'],
-                     frameTick['gyroscope.Y'],
-                     frameTick['gyroscope.Z']
-                     ])
-    acc = np.array([0,
-                    frameTick['accelerometer.X'],
-                    frameTick['accelerometer.Y'],
-                    frameTick['accelerometer.Z']
-                    ])
-    mag = np.array([0,
-                    frameTick['magnetometer.X'],
-                    frameTick['magnetometer.Y'],
-                    frameTick['magnetometer.Z']
-                    ])
-
-    # Convert to quaternions
+    # Quaternions multiplication
     Gx = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(gyro),
+        gyro,
         (0, 1, 0, 0)),
-        gyro)
+        problem_1.iii_quaternion_inverse_rotation(gyro))
     Gy = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(gyro),
+        gyro,
         (0, 0, 1, 0)),
-        gyro)
+        problem_1.iii_quaternion_inverse_rotation(gyro))
     Gz = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(gyro),
+        gyro,
         (0, 0, 0, 1)),
-        gyro)
+        problem_1.iii_quaternion_inverse_rotation(gyro))
 
-    Ax = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(acc),
+    Driftx = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_tilt,
         (0, 1, 0, 0)),
-        acc)
-    Ay = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(acc),
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
+    Drifty = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_tilt,
         (0, 0, 1, 0)),
-        acc)
-    Az = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(acc),
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
+    Driftz = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_tilt,
         (0, 0, 0, 1)),
-        acc)
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
 
-    Mx = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(mag),
+    Yawx = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_yaw,
         (0, 1, 0, 0)),
-        mag)
-    My = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(mag),
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
+    Yawy = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_yaw,
         (0, 0, 1, 0)),
-        mag)
-    Mz = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
-        problem_1.iii_quaternion_inverse_rotation(mag),
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
+    Yawz = problem_1.iv_quaternion_product(problem_1.iv_quaternion_product(
+        gyro_yaw,
         (0, 0, 0, 1)),
-        mag)
+        problem_1.iii_quaternion_inverse_rotation(gyro_tilt))
 
     # Render axes
-    ax[0].quiver(1, 0, 1,
+    ax[0].quiver(0, 0, 0,
                  *Gx[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[0].quiver(1, 0, 1,
+                 colors=[(1, 0, 0)])
+    ax[0].quiver(0, 0, 0,
                  *Gy[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[0].quiver(1, 0, 1,
+                 colors=[(0, 1, 0)])
+    ax[0].quiver(0, 0, 0,
                  *Gz[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
+                 colors=[(0, 0, 1)])
 
-    ax[1].quiver(1, 0, 1,
-                 *Ax[1:],
+    ax[1].quiver(0, 0, 0,
+                 *Driftx[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[1].quiver(1, 0, 1,
-                 *Ay[1:],
+                 colors=[(1, 0, 0)])
+    ax[1].quiver(0, 0, 0,
+                 *Drifty[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[1].quiver(1, 0, 1,
-                 *Az[1:],
+                 colors=[(0, 1, 0)])
+    ax[1].quiver(0, 0, 0,
+                 *Driftz[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
+                 colors=[(0, 0, 1)])
 
-    ax[2].quiver(1, 0, 1,
-                 *Mx[1:],
+    ax[2].quiver(0, 0, 0,
+                 *Yawx[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[2].quiver(1, 0, 1,
-                 *My[1:],
+                 colors=[(1, 0, 0)])
+    ax[2].quiver(0, 0, 0,
+                 *Yawy[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
-    ax[2].quiver(1, 0, 1,
-                 *Mz[1:],
+                 colors=[(0, 1, 0)])
+    ax[2].quiver(0, 0, 0,
+                 *Yawz[1:],
                  length=1.0,
                  normalize=True,
                  arrow_length_ratio=0.05,
-                 colors=[(0, 0, 0)])
+                 colors=[(0, 0, 1)])
 
 
+# Render animation
 ani = FuncAnimation(fig, frame_ani, frames=range(0, len(dataset), 8),
                     blit=False)
 
-
 # Set up formatting for the movie files
 Writer = animation.writers['ffmpeg']
-fullspeed_writer = Writer(fps=32, metadata=dict(artist='Me'), bitrate=1000)
-halfspeed_writer = Writer(fps=64, metadata=dict(artist='Me'), bitrate=1000)
+fullspeed_writer = Writer(fps=32, metadata=dict(artist='Me'), bitrate=1200)
+halfspeed_writer = Writer(fps=16, metadata=dict(artist='Me'), bitrate=1200)
 
 ani.save('ani_fullspeed.mp4', writer=fullspeed_writer)
-ani.save('ani_halfspeed.mp4', writer=halfspeed_writer)
+# ani.save('ani_halfspeed.mp4', writer=halfspeed_writer)
 
 # frame_ani(4)
 # plt.savefig("ani.png")
