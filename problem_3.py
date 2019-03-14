@@ -59,7 +59,7 @@ def dead_reckoning_tilt(alpha_tilt=0.001):
         qs_k = problem_1.iv_quaternion_product(
             problem_2.make_q(
                 t,
-                ((-alpha) * phi)
+                ((-alpha_tilt) * phi)
             ),
             qs_k
         )
