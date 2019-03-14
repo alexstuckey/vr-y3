@@ -1,6 +1,16 @@
+import math
 import numpy as np
 import problem_1
 import problem_2
+
+
+def q_to_v_theta(q):
+    theta = math.acos(q[0]) * 2
+    v = [q[1] / math.sin(theta / 2),
+         q[2] / math.sin(theta / 2),
+         q[3] / math.sin(theta / 2)]
+    v = q[1:] / np.sin(theta / 2)
+    return (v, theta)
 
 
 # Estimate orientation from the gyroscope (rotational rate) and accelerometer.
@@ -13,32 +23,34 @@ def dead_reckoning_tilt(alpha=0.001):
     for k in range(1, len(dataset)):
         delta_t = dataset[k]['time'] - dataset[k - 1]['time']
 
-        qs_k = problem_1.iv_quaternion_product(
-            qs[k - 1],
-            problem_2.make_q(
-                dataset[k]['omega'] / np.linalg.norm(dataset[k]['omega']),
-                np.linalg.norm(dataset[k]['omega']) * delta_t
-            )
-        )
+        qs_k = dataset[k]['est_gyro_q']
 
         # Transform acceleration measurements into the global frame (2 marks)
         a = dataset[k]['a']
         a = problem_1.iv_quaternion_product(
             problem_1.iv_quaternion_product(
                 problem_1.iii_quaternion_inverse_rotation(qs_k),
-                problem_1.i_radians_to_quaternions(*a)
+                (0, *a)
             ),
             qs_k
         )
 
+        # Trim off first element to make as vector
+        a = a[1:]
+
+        # project into XY plane
+        a = (a[0], a[1], 0)
+
         # Calculate the tilt axis (2 marks)
-        t = (a_radians[2], 0, -a_radians[0])
+        t = (a[1], -a[0], 0)
+
+        # Normalise a
+        a_norm = a / np.linalg.norm(a)
 
         # Find the angle φ between the up vector and the vector obtained from
         #   the accelerometer (2 marks)
-        a_radians = problem_1.ii_quaternion_to_radians(a)
         phi = np.arccos(np.clip(
-            np.dot((a_radians / np.linalg.norm(a_radians)), (0, 1, 0)),
+            np.dot(a_norm, (0, 0, 1)),
             -1.0,
             1.0
         ))
@@ -49,9 +61,8 @@ def dead_reckoning_tilt(alpha=0.001):
                 t,
                 ((-alpha) * phi)
             ),
-            qs[k - 1]
+            qs_k
         )
-
         qs.append(qs_k)
 
     for k in range(len(dataset)):
