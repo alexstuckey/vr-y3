@@ -4,7 +4,7 @@ import problem_2
 
 
 # Estimate orientation from the gyroscope (rotational rate) and accelerometer.
-def dead_reckoning_gyroscope_accelerometer(alpha=0.001):
+def dead_reckoning_tilt(alpha=0.001):
     # Initial orientation
     qs = [(1.0, 0.0, 0.0, 0.0)]
 
@@ -55,9 +55,9 @@ def dead_reckoning_gyroscope_accelerometer(alpha=0.001):
         qs.append(qs_k)
 
     for k in range(len(dataset)):
-        dataset[k]['est_g_a_q'] = qs[k]
-        dataset[k]['est_g_a_rad'] = problem_1.ii_quaternion_to_radians(qs[k])
-        dataset[k]['est_g_a_deg'] = tuple(
-            np.rad2deg(dataset[k]['est_g_a_rad']))
+        dataset[k]['est_tilt_q'] = qs[k]
+        dataset[k]['est_tilt_rad'] = problem_1.ii_quaternion_to_radians(qs[k])
+        dataset[k]['est_tilt_deg'] = tuple(
+            np.rad2deg(dataset[k]['est_tilt_rad']))
 
     return dataset

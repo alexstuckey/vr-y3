@@ -69,7 +69,7 @@ ax[1][1].set_xlabel('Time')
 ax[1][1].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][1].set_title('Gyroscope + Accelerometer')
 ax[1][1].plot([row['time'] for row in filter_gyro_acc],
-              [row['est_g_a_deg'] for row in filter_gyro_acc])
+              [row['est_tilt_deg'] for row in dataset])
 
 ax[1][2].set_xlabel('Time')
 ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
