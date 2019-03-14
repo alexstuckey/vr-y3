@@ -75,6 +75,8 @@ ax[1][1].plot([row['time'] for row in dataset],
 ax[1][2].set_xlabel('Time')
 ax[1][2].set_ylabel(r'Orientation (°$\,s^{-1}$)')
 ax[1][2].set_title('Gyroscope + Tilt Fitler + Yaw Filter')
+ax[1][2].plot([row['time'] for row in dataset],
+              [row['est_yaw_deg'] for row in dataset])
 
 
 plt.tight_layout()
