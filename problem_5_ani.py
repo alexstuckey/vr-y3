@@ -9,7 +9,7 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.animation as animation
 
 # Import data
-dataset = problem_4.dead_reckoning_yaw(alpha_tilt=0.05, alpha_yaw=0.05)
+dataset = problem_4.dead_reckoning_yaw(alpha_tilt=0.05, alpha_yaw=0.0005)
 
 
 my_dpi = 100

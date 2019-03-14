@@ -27,30 +27,27 @@ def dead_reckoning_tilt(alpha_tilt=0.001):
 
         # Transform acceleration measurements into the global frame (2 marks)
         a = dataset[k]['a']
-        a = problem_1.iv_quaternion_product(
+        a_hat = problem_1.iv_quaternion_product(
+            problem_1.iii_quaternion_inverse_rotation(qs_k),
             problem_1.iv_quaternion_product(
-                problem_1.iii_quaternion_inverse_rotation(qs_k),
-                (0, *a)
-            ),
-            qs_k
+                (0, *a),
+                qs_k,
+            )
         )
 
         # Trim off first element to make as vector
-        a = a[1:]
+        a_hat = a_hat[1:]
 
         # project into XY plane
-        a = (a[0], a[1], 0)
+        a_hat = (a_hat[0], a_hat[1], 0)
 
         # Calculate the tilt axis (2 marks)
-        t = (a[1], -a[0], 0)
-
-        # Normalise a
-        a_norm = a / np.linalg.norm(a)
+        t = (a_hat[1], -a_hat[0], 0)
 
         # Find the angle φ between the up vector and the vector obtained from
         #   the accelerometer (2 marks)
         phi = np.arccos(np.clip(
-            np.dot(a_norm, (0, 0, 1)),
+            np.dot(a_hat, (0, 0, 1)),
             -1.0,
             1.0
         ))

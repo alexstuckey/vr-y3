@@ -23,18 +23,18 @@ def dead_reckoning_yaw(alpha_yaw=0.001, alpha_tilt=0.001):
 
         m_prime = (0.0, *dataset[k]['m'])
         m_prime = problem_1.iv_quaternion_product(
+            problem_1.iii_quaternion_inverse_rotation(qs_k),
             problem_1.iv_quaternion_product(
-                problem_1.iii_quaternion_inverse_rotation(qs_k),
-                (0, *m_prime)
-            ),
-            qs_k
+                (0, *m_prime),
+                qs_k
+            )
         )
         m_ref = problem_1.iv_quaternion_product(
+            problem_1.iii_quaternion_inverse_rotation(qs_k),
             problem_1.iv_quaternion_product(
-                problem_1.iii_quaternion_inverse_rotation(qs_k),
-                (0, *m_ref)
-            ),
-            qs_k
+                (0, *m_ref),
+                qs_k,
+            )
         )
 
         # Project into XY plane
@@ -42,12 +42,13 @@ def dead_reckoning_yaw(alpha_yaw=0.001, alpha_tilt=0.001):
         m_prime = (m_prime[0], m_prime[1], 0)
 
         # Calculate thetas, to be used to find difference
-        theta = math.atan2(m_prime[0], m_prime[2])
-        theta_r = math.atan2(m_ref[0], m_ref[2])
+        theta = math.atan2(m_prime[1], -m_prime[0])
+        theta_r = math.atan2(m_ref[1], -m_ref[0])
 
+        # Using (0,0,1) instead of (0,1,0) due to up-direction in data
         qs_k = problem_1.iv_quaternion_product(
             problem_2.make_q(
-                (0, 1, 0),
+                (0, 0, 1),
                 ((-alpha_yaw) * (theta - theta_r))
             ),
             qs_k
