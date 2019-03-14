@@ -1,6 +1,3 @@
-import problem_1
-import problem_2
-import problem_3
 import problem_4
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
