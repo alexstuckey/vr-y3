@@ -8,18 +8,7 @@ def dead_reckoning_gyroscope_accelerometer(alpha=0.001):
     # Initial orientation
     qs = [(1.0, 0.0, 0.0, 0.0)]
 
-    dataset = [{'time': 0.0}] + problem_1.load_dataset()
-
-    for row in dataset:
-        if 'gyroscope.X' in row.keys():
-            row['omega'] = np.array([row['gyroscope.X'],
-                                     row['gyroscope.Y'],
-                                     row['gyroscope.Z']
-                                     ])
-            row['a'] = np.array([row['accelerometer.X'],
-                                 row['accelerometer.Y'],
-                                 row['accelerometer.Z']
-                                 ])
+    dataset = problem_2.dead_reckoning_gyroscope()
 
     for k in range(1, len(dataset)):
         delta_t = dataset[k]['time'] - dataset[k - 1]['time']
