@@ -30,6 +30,14 @@ def dead_reckoning_gyroscope():
                                      row['gyroscope.Y'],
                                      row['gyroscope.Z']
                                      ])
+            row['a'] = np.array([row['accelerometer.X'],
+                                 row['accelerometer.Y'],
+                                 row['accelerometer.Z']
+                                 ])
+            row['m'] = np.array([row['magnetometer.X'],
+                                 row['magnetometer.Y'],
+                                 row['magnetometer.Z']
+                                 ])
 
     for k in range(1, len(dataset)):
         delta_t = dataset[k]['time'] - dataset[k - 1]['time']
