@@ -78,3 +78,4 @@ ax[1][2].plot([row['time'] for row in dataset],
 
 plt.tight_layout()
 plt.savefig('testplot.png')
+plt.close('all')
