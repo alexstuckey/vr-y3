@@ -99,7 +99,7 @@ def each_row(row):
         (float(row['accelerometer.X']) * float(row['accelerometer.X'])) \
         + (float(row['accelerometer.Y']) * float(row['accelerometer.Y'])) \
         + (float(row['accelerometer.Z']) * float(row['accelerometer.Z']))
-    acc_norm = math.sqrt(acc_sum)
+    acc_norm = min(math.sqrt(acc_sum), 1)
     newDict['accelerometer.X'] = float(row['accelerometer.X']) / acc_norm
     newDict['accelerometer.Y'] = float(row['accelerometer.Y']) / acc_norm
     newDict['accelerometer.Z'] = float(row['accelerometer.Z']) / acc_norm
