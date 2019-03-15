@@ -163,7 +163,7 @@ fullspeed_writer = Writer(fps=32, metadata=dict(artist='Me'), bitrate=1200)
 halfspeed_writer = Writer(fps=16, metadata=dict(artist='Me'), bitrate=1200)
 
 ani.save('ani_fullspeed.mp4', writer=fullspeed_writer)
-# ani.save('ani_halfspeed.mp4', writer=halfspeed_writer)
+ani.save('ani_halfspeed.mp4', writer=halfspeed_writer)
 
 # frame_ani(4)
 # plt.savefig("ani.png")
